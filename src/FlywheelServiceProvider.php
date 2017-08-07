@@ -2,7 +2,7 @@
 
 namespace Allenjd3\Flywheel;
 
-use FlywheelWrapper;
+use Allenjd3\Flywheel\FlywheelWrapper;
 use Illuminate\Support\ServiceProvider;
 
 
