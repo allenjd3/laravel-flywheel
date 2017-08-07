@@ -27,7 +27,7 @@ class FlywheelServiceProvider extends ServiceProvider
 	public function register()
 	{
 
-		$this->app->bind('Flywheel', function(){
+		$this->app->bind('Flywheel.php', function(){
 			return new FlywheelWrapper();
 		});
 	}
