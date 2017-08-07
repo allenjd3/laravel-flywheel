@@ -46,6 +46,7 @@ class FlywheelWrapper {
 		$this->repository = new Repository($table, $this->config);
 		$this->markdownParse = new GithubMarkdown();
 		$this->markdownParse->html5 = true;
+		$this->query = $this->repository->query();
 		return $this;
 	}
 
@@ -83,7 +84,7 @@ class FlywheelWrapper {
 	 */
 	public function where($var, $sym, $comp) {
 
-		$this->query = $this->repository->query()->where($var,$sym,$comp);
+		$this->query->where($var,$sym,$comp);
 		return $this;
 	}
 
@@ -99,5 +100,71 @@ class FlywheelWrapper {
 		}
 		return $response;
 	}
+
+	/**
+	 * @param $var
+	 * @param $sym
+	 * @param $comp
+	 *
+	 * @return FlywheelWrapper
+	 */
+	public function andWhere($var, $sym, $comp) {
+		return $this->where($var, $sym, $comp);
+	}
+
+	/**
+	 * @param $table
+	 * @param $direction
+	 *
+	 * @return $this
+	 */
+	public function orderBy($table, $direction) {
+		$val = "{$table} {$direction}";
+		$this->query->orderBy($val);
+		return $this;
+	}
+
+	/**
+	 * @param $count
+	 * @param int $offset
+	 *
+	 * @return $this
+	 */
+	public function limit($count, $offset=0) {
+		$this->query->limit($count, $offset);
+		return $this;
+	}
+
+	/**
+	 * @param $post
+	 *
+	 * @return mixed
+	 */
+	public function update($post) {
+		return $this->repository->update($post);
+	}
+
+	/**
+	 * @param $post
+	 *
+	 * @return mixed
+	 */
+	public function delete($post) {
+		return $this->repository->delete($post);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getFirst() {
+		$docs = $this->get();
+		if(count($docs)>0) {
+			return $docs->first();
+		}
+		else {
+			return $docs;
+		}
+	}
+
 
 }
