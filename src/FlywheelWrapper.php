@@ -13,6 +13,7 @@ class FlywheelWrapper {
 	protected $query;
 	protected $config;
 	protected $repository;
+	protected $markdownParse;
 
 	/**
 	 * FlywheelWrapper constructor.
@@ -43,6 +44,8 @@ class FlywheelWrapper {
 			) );
 		}
 		$this->repository = new Repository($table, $this->config);
+		$this->markdownParse = new GithubMarkdown();
+		$this->markdownParse->html5 = true;
 		return $this;
 	}
 
@@ -50,7 +53,11 @@ class FlywheelWrapper {
 	 * @return mixed
 	 */
 	public function findAll() {
-		return $this->repository->findAll();
+		$docs = collect($this->repository->findAll());
+		foreach($docs as $doc) {
+			$doc->body = $this->markdownParse->parse($doc->body);
+		}
+		return $docs;
 	}
 
 	/**
@@ -84,7 +91,13 @@ class FlywheelWrapper {
 	 * @return mixed
 	 */
 	public function get() {
-		return collect($this->query->execute());
+
+		$response = collect($this->query->execute());
+
+		foreach ($response as $r) {
+			$r->body = $this->markdownParse->parse($r->body);
+		}
+		return $response;
 	}
 
 }

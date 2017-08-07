@@ -9,7 +9,8 @@
     ],
     "require": {
         "jamesmoss/flywheel": "^0.5.2",
-        "mustangostang/spyc": "^0.6.2"
+        "mustangostang/spyc": "^0.6.2",
+        "cebe/markdown": "~1.1.1"
     },
     "autoload": {
         "psr-4": {
