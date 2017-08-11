@@ -2,7 +2,7 @@
 
 namespace Allenjd3\Flywheel;
 
-use App\src\FlywheelWrapper;
+use FlywheelWrapper;
 use Illuminate\Support\ServiceProvider;
 
 class FlywheelServiceProvider extends ServiceProvider
