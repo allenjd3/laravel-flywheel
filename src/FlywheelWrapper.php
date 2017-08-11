@@ -11,6 +11,7 @@ use JamesMoss\Flywheel\Repository;
 class FlywheelWrapper {
 
 	protected $query;
+	protected $parser;
 	protected $repository;
 
 	/**
@@ -35,6 +36,7 @@ class FlywheelWrapper {
 			'query_class'    => FlywheelQuery::class,
 			'document_class' => FlywheelDocument::class
 		));
+		$this->parser = new \cebe\markdown\GithubMarkdown();
 		$this->repository = new Repository($name, $config);
 		$this->query = $this->repository->query();
 		return $this;
@@ -71,21 +73,28 @@ class FlywheelWrapper {
 	}
 
 	/**
-	 * @return mixed
+	 * @return array // of Documents
 	 */
 	public function findAll() {
-		return $this->repository->findAll();
+		$docs = $this->repository->findAll();
+		foreach($docs as $doc) {
+			$doc->body = $this->parser->parse($doc->body);
+		}
+		return $docs;
 	}
 	/**
 	 * Returns a single document based on it's ID
 	 *
 	 * @param  string $id The ID of the document to find
+	 * @param  boolean $parseMd // pass true to parse the markdown for viewing.
 	 *
 	 * @return Document|boolean  The document if it exists, false if not.
 	 */
-	public function findById($id)
+	public function findById($id, $parseMd = false)
 	{
-		return $this->repository->findbyId($id);
+		$doc = $this->repository->findbyId($id);
+		$doc->body = $this->parser->parse($doc->body);
+		return $doc;
 	}
 	/**
 	 * Delete a document from the repository using its ID.
@@ -114,7 +123,11 @@ class FlywheelWrapper {
 	 * @return Result
 	 */
 	public function get() {
-		return $this->query->execute();
+		$results = $this->query->execute();
+		foreach ($results as $result) {
+			$result->body = $this->parser->parse($result->body);
+		}
+		return $results;
 	}
 
 	/**
