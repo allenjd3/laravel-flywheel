@@ -32,7 +32,7 @@ class FlywheelWrapper {
 	 */
 	public function config($name='posts', $path='../storage') {
 		$config = new Config($path, array(
-			'formatter' => new \JamesMoss\Flywheel\Formatter\Markdown,
+			'formatter' => new FlywheelFormatterMarkdown::class,
 			'query_class'    => FlywheelQuery::class,
 			'document_class' => FlywheelDocument::class
 		));
