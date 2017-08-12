@@ -1,6 +1,7 @@
 {
     "name": "allenjd3/laravel-flywheel",
     "description": "a laravel wrapper for the flywheel package",
+    "license": "MIT",
     "authors": [
         {
             "name": "James Allen",
